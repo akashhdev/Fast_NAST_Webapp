@@ -1,0 +1,119 @@
+/* Importing the Roboto font from Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+/* Apply the Roboto font to the entire body */
+body {
+  font-family: "Roboto", sans-serif;
+  text-align: center; /* Center text horizontally */
+  margin: 0; /* Remove default margins */
+  padding: 0; /* Remove default padding */
+  background-color: #262626;
+}
+
+/* Heading styles */
+h1 {
+  font-weight: bold; /* Bold heading */
+  color: #e8e8e8; /* Dark grey */
+}
+
+/* Subheading styles */
+h2 {
+  color: #bcbbbb; /* Lighter grey for subheadings */
+}
+
+/* Teal button styles */
+button {
+  background-color: teal;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 24px; /* Increased font size */
+}
+
+button:hover {
+  background-color: darkcyan; /* Darken on hover */
+}
+
+/* Importing the Roboto font from Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+/* Apply the Roboto font and center text horizontally */
+body {
+  font-family: "Roboto", sans-serif;
+  text-align: center; /* Center text horizontally */
+  margin: 0; /* Remove default margins */
+  padding: 0; /* Remove default padding */
+}
+
+/* Container for overall structure */
+.container {
+  text-align: center; /* Center text */
+  width: 80%; /* Keep content centered */
+  margin: 0 auto; /* Center horizontally */
+}
+
+/* File input wrapper and custom button */
+.file-input-wrapper {
+  position: relative; /* For custom file input */
+  display: inline-block; /* Align elements in-line */
+}
+
+.custom-file-label {
+  background-color: teal; /* Teal background */
+  color: #dddcdc; /* Custom text color */
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer; /* Pointer on hover */
+}
+
+/* Invisible file input placed over the custom button */
+.custom-file-input {
+  opacity: 0; /* Hide the default file input */
+  position: absolute; /* Place above the custom button */
+  top: 0; /* Align at the top */
+  left: 0; /* Align at the left */
+  height: 100%; /* Match the height of the button */
+  width: 100%; /* Match the width of the button */
+  cursor: pointer; /* Allow clicking */
+}
+
+/* Preview image styling */
+.preview-image {
+  max-width: 50%; /* Ensure it doesn't exceed container width */
+  height: auto; /* Maintain aspect ratio */
+  margin-top: 30px; /* Add space above the preview */
+}
+
+/* Row for multiple columns */
+.row {
+  display: flex; /* Use flexbox for row layout */
+  justify-content: space-between; /* Evenly space columns */
+  margin-top: 20px; /* Add space at the top */
+}
+
+/* Columns for equal-width columns */
+.column {
+  flex: 1; /* Each column takes equal width */
+  padding: 10px; /* Padding between columns */
+}
+
+/* Heading styles */
+h2,
+h3 {
+  color: #dddcdc; /* Light grey */
+}
+
+/* Enlarged image preview */
+img {
+  width: 100%; /* Make the image take the full width of the column */
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* Row for multiple columns */
+.row {
+  display: flex; /* Use flexbox for row layout */
+  justify-content: space-between; /* Evenly space columns */
+  margin-top: 20px; /* Add space at the top */
+}

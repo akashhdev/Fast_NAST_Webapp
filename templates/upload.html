@@ -1,0 +1,62 @@
+<!-- templates/upload.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Upload Image</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css" />
+    <!-- Link to CSS -->
+    <!-- JavaScript to handle file preview -->
+    <script>
+      function previewFile() {
+        const fileInput = document.querySelector('input[type="file"]'); // Get the file input
+        const preview = document.getElementById("image-preview"); // Get the preview image element
+
+        const file = fileInput.files[0]; // Get the selected file
+        const reader = new FileReader(); // Create a FileReader to read the file
+
+        reader.addEventListener(
+          "load",
+          () => {
+            preview.src = reader.result; // Set the preview source to the file data URL
+          },
+          false
+        );
+
+        if (file) {
+          reader.readAsDataURL(file); // Read the file as data URL
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Centered content -->
+      <h2>Upload an Image</h2>
+      <!-- Light grey -->
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <!-- Custom file input with styled label -->
+        <div class="file-input-wrapper">
+          <label
+            class="custom-file-label"
+            onclick="document.querySelector('.custom-file-input').click()"
+            >Choose File</label
+          >
+          <!-- Custom label -->
+          <input
+            type="file"
+            name="file"
+            class="custom-file-input"
+            onchange="previewFile()"
+          />
+          <!-- Trigger preview on change -->
+        </div>
+        <!-- Submit button -->
+        <button type="submit">Upload</button>
+        <!-- Teal submit button -->
+      </form>
+      <!-- Image preview area -->
+      <img id="image-preview" class="preview-image" alt="Image Preview" />
+      <!-- Display the preview -->
+    </div>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+<!-- templates/result.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Result</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css" />
+    <!-- Link to CSS -->
+  </head>
+  <body>
+    <div class="container">
+      <!-- Overall container with centered content -->
+      <h2>Here are your images:</h2>
+      <!-- Light grey heading -->
+      <div class="row">
+        <!-- Create a row with two columns -->
+        <div class="column">
+          <!-- First column -->
+          <h3>Original Image</h3>
+          <!-- Heading for the original image -->
+          <img src="/uploads/{{ filename }}" alt="Original Image" />
+          <!-- Display the original image -->
+        </div>
+        <div class="column">
+          <!-- Second column -->
+          <h3>Color Restored Image</h3>
+          <!-- Heading for the color restored image -->
+          <img
+            src="/uploads/colorized_{{ filename }}"
+            alt="Color Restored Image"
+          />
+          <!-- Display the same image for now -->
+        </div>
+      </div>
+      <!-- "Restore More Images" button at the bottom -->
+      <button onclick="window.location.href='/cleanup'">
+        Restore More Images
+      </button>
+      <!-- Link to the index page -->
+    </div>
+  </body>
+</html>
