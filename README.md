@@ -3,11 +3,17 @@
 ## Overview
 This project is a simple web application built with Flask that allows users to upload black-and-white images and receive colorized versions using a trained machine learning model. The application features a minimalist UI, allowing users to upload images, view colorized results, and clear uploaded files.
 
-![image](https://github.com/akashhdev/imageRestorization/assets/89295808/6b1ee30b-89e1-452a-a109-af2064f08d37)
+<!-- Demo Screenshot 1 -->
+<img src="https://github.com/akashhdev/imageRestorization/assets/89295808/0e6bdad0-7a92-4e06-aa44-0dbee2924df6" alt="Example Image" width="300" />
 
-![image](https://github.com/akashhdev/imageRestorization/assets/89295808/e0f1e57d-724d-412b-9bcc-55dca9d198c8)
+<!-- Demo Screenshot 2 -->
+<img src="https://github.com/akashhdev/imageRestorization/assets/89295808/6b1ee30b-89e1-452a-a109-af2064f08d37" alt="Example Image" width="300" />
 
-![image](https://github.com/akashhdev/imageRestorization/assets/89295808/ad5492c2-b5c6-4d46-a4dd-42c533aba3fb)
+<!-- Demo Screenshot 3 -->
+<img src="https://github.com/akashhdev/imageRestorization/assets/89295808/e0f1e57d-724d-412b-9bcc-55dca9d198c8" alt="Example Image" width="300" />
+
+<!-- Demo Screenshot 4 -->
+<img src="https://github.com/akashhdev/imageRestorization/assets/89295808/ad5492c2-b5c6-4d46-a4dd-42c533aba3fb" alt="Example Image" width="300" />
 
 
 ## Features
