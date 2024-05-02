@@ -62,6 +62,7 @@ Use the application to upload images, view colorized results, and more.
 
 **Additional Notes**
 Cleanup: Clicking the "Restore More Images" button on the result page deletes all uploaded files in the uploads folder.
+
 Error Handling: If you encounter errors, check the console output for detailed messages and consider adjusting batch size, resource allocation, or other configurations.
 
 **Contributing**
