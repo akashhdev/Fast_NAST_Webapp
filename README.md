@@ -13,7 +13,7 @@ This project is a simple web application built with Flask that allows users to u
 <img src="https://github.com/user-attachments/assets/9026ace7-6491-416a-a83c-250a19009435" alt="Example Image" width="400" height="300"/>
 
 <!-- Demo Screenshot 4 -->
-<img src="https://github.com/akashhdev/imageRestorization/assets/89295808/ad5492c2-b5c6-4d46-a4dd-42c533aba3fb" alt="Example Image" width="400" height="300"/>
+<img src="https://github.com/user-attachments/assets/d588577b-712d-40bf-8243-7e1329330da2" alt="Example Image" width="400" height="300"/>
 
 
 **Features**
