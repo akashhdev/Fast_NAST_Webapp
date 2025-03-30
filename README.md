@@ -1,4 +1,4 @@
-# Image Colorization Web App
+# Neural Artistic Style Transfer Web App
 
 ## Overview
 This project is a simple web application built with Flask that allows users to upload any images of their choosing and transfer a choose art style to them using a trained machine learning model. The application features a minimalist UI, allowing users to upload images, view colorized results, and clear uploaded files.
