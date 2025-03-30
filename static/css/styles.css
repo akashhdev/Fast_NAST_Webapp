@@ -81,9 +81,12 @@ body {
 
 /* Preview image styling */
 .preview-image {
-  max-width: 50%; /* Ensure it doesn't exceed container width */
+  max-width: 25%; /* Ensure it doesn't exceed container width */
   height: auto; /* Maintain aspect ratio */
   margin-top: 30px; /* Add space above the preview */
+  display: block; /* Makes margin auto work */
+  margin-left: auto;  
+  margin-right: auto;
 }
 
 /* Row for multiple columns */

@@ -1,22 +1,88 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Image Restoration Project</title>
     <link rel="stylesheet" type="text/css" href="/static/css/styles.css" />
-    <!-- Link to CSS -->
+    <script>
+      let selectedStyle = "";
+
+      function selectStyle(style, element) {
+        // Remove highlight from all images
+        document.querySelectorAll(".style-image").forEach(img => {
+          img.classList.remove("selected");
+        });
+
+        // Highlight the selected image
+        element.classList.add("selected");
+
+        // Store selected style
+        selectedStyle = style;
+      }
+
+      function goToUpload() {
+        if (!selectedStyle) {
+          alert("Please select a style first!");
+          return;
+        }
+        window.location.href = "/upload?style=" + selectedStyle;
+      }
+    </script>
+    <style>
+      .style-selection {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+      .style-image {
+        width: 250px;
+        height: 250px;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: border 0.3s;
+      }
+      .style-image.selected {
+        border: 3px solid teal;
+      }
+      button {
+        margin-top: 20px;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
-      <!-- Center content using flexbox -->
-      <h1>Image Restoration Project</h1>
-      <!-- Bold, dark grey -->
-      <h2>Welcome! Choose an option:</h2>
-      <!-- Grey -->
-      <button onclick="window.location.href='/upload'">
-        Restore Image Color
-      </button>
-      <!-- Teal button -->
+      <div style="width: 100%; height: 150px;"></div>
+      <h1>Neural Artistic Style Transfer</h1>
+      <div style="width: 100%; height: 20px;"></div>
+      <h2>Welcome! Select A Style</h2>
+      <div style="width: 100%; height: 25px;"></div>
+
+      <!-- Style selection -->
+      <div class="style-selection">
+            <img src="/static/styles/style1.jpg" class="style-image" onclick="selectStyle('picassoStyle', this)" alt="Picasso Style">
+            <img src="/static/styles/style2.jpg" class="style-image" onclick="selectStyle('waterColorStyle', this)" alt="Watercolor Style">
+
+            <!-- Hidden input to store the selected style -->
+            <input type="hidden" id="selected-style" value="waterColorStyle">
+
+
+            <script>
+              function selectStyle(style, element) {
+                  document.getElementById("selected-style").value = style;  // Store selected style
+                  document.querySelectorAll(".style-image").forEach(img => img.classList.remove("selected"));
+                  element.classList.add("selected");
+              }
+          
+              function goToUpload() {
+                  const selectedStyle = document.getElementById("selected-style").value;
+                  console.log("Navigating to upload with style:", selectedStyle);  // Debugging log
+                  window.location.href = `/upload?style=${selectedStyle}`;  // Pass style as URL param
+              }
+          </script>
+      </div>
+
+      <!-- Apply button -->
+      <div style="width: 100%; height: 25px;"></div>
+      <button onclick="goToUpload()">Apply Neural Artistic Style Transfer</button>
     </div>
   </body>
 </html>

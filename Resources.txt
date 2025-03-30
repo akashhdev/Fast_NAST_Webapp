@@ -1,0 +1,3 @@
+1. Fast Style Transfer https://github.com/lengstrom/fast-style-transfer
+
+2. Fast Neural Style (Research Paper) https://github.com/jcjohnson/fast-neural-style
