@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>How It Works - Neural Style Transfer</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .body {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        background-color: #000; /* Optional: Add a background color */
+        
+      }
+      .p {
+        text-align: left; /* Ensures left alignment */
+            white-space: pre-wrap; /* Preserves formatting and wraps long lines */
+      }
+      .container {
+        margin: 20px auto;
+        max-width: 800px;  
+      }
+      h1, h2, h3 {
+        text-align: center;
+        color: #222; 
+      }
+      img {
+        display: block;
+        margin: 0 auto;
+      }
+      .caption {
+        text-align: center;
+        font-style: italic;
+        margin-top: 5px;
+      }
+      .content p {
+        color: #333;        /* Paragraph text white */
+        font-size: 18px;     /* Increased font size */
+        line-height: 1.6;
+        margin-top: 15px;
+      }
+      button {
+        margin-top: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 10px 20px;
+        font-size: 16px;
+      }
+      body {
+        background-color: #FFFFFF; /* Dark background so white text stands out */
+      }
+      p, h1, h2, h3, h4, h5, h6, li {
+          text-align: left; /* Aligns all paragraphs and headings to the left */
+        }
+      .image-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            align-items: center;
+        }
+        .image-container {
+            text-align: center;
+        }
+        .image-container img {
+            display: block;
+            margin: 0 auto;
+        }
+        pre {
+            background-color: #f1f1f1;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.5;
+            text-align: left; /* Ensures left alignment */
+            white-space: pre-wrap; /* Preserves formatting and wraps long lines */
+        }
+        code {
+            font-family: "Courier New", Courier, monospace;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Neural Style Transfer</h1>
+      <img src="static\explanation\OverviewOfNAST.png" style="width: 700px; height: 500px;"  alt="Neural Style Transfer">
+      <div class="caption">Fig 1. Neural Style Transfer</div>
+      <br>
+      <div class="content">
+        <p>
+          According to Wikipedia, Neural Style Transfer (NST), also called Artistic Style Transfer, refers to a class of software algorithms that manipulate digital images or videos to adopt the appearance or visual style of another image. NST algorithms use deep neural networks to transform images.
+        </p>
+        <p>
+          <strong>In simple words, Neural style transfer is the process of creating art using computers. It is the process of painting the contents of one image with the style of another.</strong>
+        </p>
+      </div>
+    <div style="padding: 15px;"></div>
+        
+        <h2>Content and Style Images</h2>
+        <div class="image-row">
+        <div class="image-container">
+            <img src="static\explanation\japanese_garden.jpg" width="150" alt="Content Image">
+            <div class="caption">Fig 2. Content Image</div>
+        </div>
+        <div class="image-container">
+            <img src="static\explanation\add_symbol.png" style="width: 50px; height: 50px;" alt="Content Image">           
+        </div>
+        <div class="image-container">
+            <img src="static\explanation\picasso_selfportrait.jpg" width="200" alt="Style Image">
+            <div class="caption">Fig 3. Style Image</div>
+        </div>
+        </div>
+        <br>
+        <img src="static\explanation\animate.gif" width="900" alt="Neural Style Transfer">
+        <div class="caption">Fig 4. Result Of Style Transfer Over 2400 Epochs</div>
+
+        <div style="padding: 15px;"></div>
+      
+      <h2>How Does NST Work?</h2>
+      <img src="https://miro.medium.com/max/1294/1*ZgW520SZr1QkGoFd3xqYMw.jpeg" width="700" alt="Working">
+      <div class="caption">Fig 4. Working</div>
+      <br>
+      <div class="content">
+        <p>
+          First, let's discuss the traditional approach of neural style transfer given by Gatys et al. in their paper "A Neural Algorithm of Artistic Style". It is based on the idea that convolutional neural networks can separate content from style.
+        </p>
+        <p>
+          NST uses a pre-trained network to extract features from a content image and a style image. A loss function, composed of a content loss and a style loss, is then minimized to generate a new image that preserves the content of the original while adopting the style of the reference image.
+        </p>
+        <p>
+          The traditional approach is very slow as it requires iterative optimization for each new image. Fast Neural Style Transfer addresses this by training a transformation network to apply a specific style in a single forward pass.
+        </p>
+      </div>
+
+      <div style="padding: 15px;"></div>
+      
+      <h2>Fast Neural Style Transfer</h2>
+      
+      <img src="static\explanation\WorkingOfTransformerNet.png" width="700" alt="TransformerNet and VGG16">
+        <div class="caption">Fig 6. Working of TransformerNet and VGG16 for fast NST</div>
+        <br>
+        <div class="content">
+        <p>
+            Training a style transfer model requires two networks: a pre-trained feature extractor and a transfer network. The pre-trained feature extractor is used to avoid having to use paired training data. Its usefulness arises from the curious tendency for individual layers of deep convolutional neural networks trained for image classification to specialize in understanding specific features of an image.
+        </p>
+
+        <p></p>
+        <p>
+            The pre-trained model enables us to compare the content and style of two images, but it doesn't actually help us create the stylized image. That’s the job of a second neural network, which we’ll call the transfer network. The transfer network is an image translation network that takes one image as input and outputs another image. Transfer networks typically have an encode-decoder architecture.
+        </p>
+        <p>
+            At the beginning of training, one or more style images are run through the pre-trained feature extractor, and the outputs at various style layers are saved for later comparison. Content images are then fed into the system. Each content image passes through the pre-trained feature extractor, where outputs at various content layers are saved. The content image then passes through the transfer network, which outputs a stylized image. The stylized image is also run through the feature extractor, and outputs at both the content and style layers are saved.
+        </p>
+
+        <img src="static\explanation\lossFunctions.png" width="700" alt="Loss Functions">
+
+        <p>
+            The quality of the stylized image is defined by a custom loss function that has terms for both content and style. The extracted content features of the stylized image are compared to the original content image, while the extracted style features are compared to those from the reference style image(s). After each step, only the transfer network is updated. The weights of the pre-trained feature extractor remain fixed throughout. By weighting the different terms of the loss function, we can train models to produce output images with lighter or heavier stylization.
+        </p>
+        </div>
+        <br>
+        <h3>Requirements</h3>
+        <div class="content">
+        <p>For smooth working of this notebook, please use these settings. Create a new virtual environment and install these dependencies in it:</p>
+        <ul>
+            <li>Python == 3.7.6</li>
+            <li>Torch == 1.5.1</li>
+            <li>Torchvision == 0.6.0a0+35d732a</li>
+            <li>Numpy == 1.18.1</li>
+            <li>PIL == 5.4.1</li>
+            <li>tqdm == 4.45.0</li>
+            <li>Matplotlib == 3.2.1</li>
+            <li>OpenCV == 4.2.0.34</li>
+            <li>CUDA Version == 10.1</li>
+        </ul>
+        </div>
+
+            <h2>Usage:</h2>
+            <p>Run the <code>fast_trainer</code> function to train your custom model or use the provided pretrained model with the test function, <code>test_image</code>, to generate results.</p>
+        
+            <h2>Imports and Setup</h2>
+            <p>Let's download all the required files and import all modules.</p>
+        
+            <pre><code>
+        """ Uncomment and Download data for training (6.1 GB) """
+        # !wget http://images.cocodataset.org/zips/test2017.zip
+        # !mkdir './dataset'
+        # !unzip -q ./test2017.zip -d './dataset'
+        ' Uncomment and Download data for training (6.1 GB) '
+        
+        """ Download the best model weights """
+        !mkdir ./checkpoints
+        !wget -q -O 'best_model.pth' https://www.dropbox.com/s/7xvmmbn1bx94exz/best_model.pth?dl=1
+        !mv best_model.pth ./checkpoints
+        
+        """ Download content and style images """
+        !mkdir ./content
+        !mkdir ./style
+        !wget -q https://github.com/myelinfoundry-2019/challenge/raw/master/japanese_garden.jpg -P './content'
+        !wget -q https://github.com/myelinfoundry-2019/challenge/raw/master/picasso_selfportrait.jpg -P './style'
+        
+        import torch
+        from torch.autograd import Variable
+        from collections import namedtuple
+        from torchvision import models
+        import torch.nn as nn
+        import torch.nn.functional as F
+        from torchvision import transforms
+        import numpy as np
+        import os
+        import sys
+        import random
+        from PIL import Image
+        import glob
+        from torch.optim import Adam
+        from torch.utils.data import DataLoader
+        from torchvision import datasets
+        from torchvision.utils import save_image
+        import matplotlib.pyplot as plt
+        import cv2
+        
+        def seed_everything(seed):
+            random.seed(seed)
+            os.environ['PYTHONHASHSEED'] = str(seed)
+            np.random.seed(seed)
+            torch.manual_seed(seed)
+            torch.cuda.manual_seed(seed)
+            torch.backends.cudnn.deterministic = True
+            torch.backends.cudnn.benchmark = True
+        
+        seed_everything(42) # for reproducibility
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        
+        # Mean and standard deviation used for training
+        mean = np.array([0.485, 0.456, 0.406])
+        std = np.array([0.229, 0.224, 0.225])
+            </code></pre>
+
+            <h2>Defining Models</h2>
+    <p>Here we have 2 models:</p>
+    <ul>
+        <li><b>VGG16:</b> Pre-trained model for feature extraction for loss comparisons.</li>
+        <li><b>TransformerNet:</b> The main model which acts as an encoder-decoder pair and learns to convert any image to a specific style.</li>
+    </ul>
+
+    <pre><code>
+    """ Pretrained VGG16 Model """
+    class VGG16(torch.nn.Module):
+        def __init__(self, requires_grad=False):
+            super(VGG16, self).__init__()
+            vgg_pretrained_features = models.vgg16(pretrained=True).features
+            self.slice1 = torch.nn.Sequential()
+            self.slice2 = torch.nn.Sequential()
+            self.slice3 = torch.nn.Sequential()
+            self.slice4 = torch.nn.Sequential()
+            
+            for x in range(4):
+                self.slice1.add_module(str(x), vgg_pretrained_features[x])
+            for x in range(4, 9):
+                self.slice2.add_module(str(x), vgg_pretrained_features[x])
+            for x in range(9, 16):
+                self.slice3.add_module(str(x), vgg_pretrained_features[x])
+            for x in range(16, 23):
+                self.slice4.add_module(str(x), vgg_pretrained_features[x])
+            if not requires_grad:
+                for param in self.parameters():
+                    param.requires_grad = False
+
+        def forward(self, X):
+            h = self.slice1(X)
+            h_relu1_2 = h
+            h = self.slice2(h)
+            h_relu2_2 = h
+            h = self.slice3(h)
+            h_relu3_3 = h
+            h = self.slice4(h)
+            h_relu4_3 = h
+            vgg_outputs = namedtuple("VggOutputs", ["relu1_2", "relu2_2", "relu3_3", "relu4_3"])
+            out = vgg_outputs(h_relu1_2, h_relu2_2, h_relu3_3, h_relu4_3)
+            return out
+    </code></pre>
+
+    <pre><code>
+    """ Transformer Net """
+    class TransformerNet(torch.nn.Module):
+        def __init__(self):
+            super(TransformerNet, self).__init__()
+            self.model = nn.Sequential(
+                ConvBlock(3, 32, kernel_size=9, stride=1),
+                ConvBlock(32, 64, kernel_size=3, stride=2),
+                ConvBlock(64, 128, kernel_size=3, stride=2),
+                ResidualBlock(128),
+                ResidualBlock(128),
+                ResidualBlock(128),
+                ResidualBlock(128),
+                ResidualBlock(128),
+                ConvBlock(128, 64, kernel_size=3, upsample=True),
+                ConvBlock(64, 32, kernel_size=3, upsample=True),
+                ConvBlock(32, 3, kernel_size=9, stride=1, normalize=False, relu=False),
+            )
+
+        def forward(self, x):
+            return self.model(x)
+    </code></pre>
+
+    <pre><code>
+    """ Components of Transformer Net """
+    class ResidualBlock(torch.nn.Module):
+        def __init__(self, channels):
+            super(ResidualBlock, self).__init__()
+            self.block = nn.Sequential(
+                ConvBlock(channels, channels, kernel_size=3, stride=1, normalize=True, relu=True),
+                ConvBlock(channels, channels, kernel_size=3, stride=1, normalize=True, relu=False),
+            )
+
+        def forward(self, x):
+            return self.block(x) + x
+    </code></pre>
+
+    <pre><code>
+    class ConvBlock(torch.nn.Module):
+        def __init__(self, in_channels, out_channels, kernel_size, stride=1, upsample=False, normalize=True, relu=True):
+            super(ConvBlock, self).__init__()
+            self.upsample = upsample
+            self.block = nn.Sequential(
+                nn.ReflectionPad2d(kernel_size // 2), nn.Conv2d(in_channels, out_channels, kernel_size, stride)
+            )
+            self.norm = nn.InstanceNorm2d(out_channels, affine=True) if normalize else None
+            self.relu = relu
+
+        def forward(self, x):
+            if self.upsample:
+                x = F.interpolate(x, scale_factor=2)
+            x = self.block(x)
+            if self.norm is not None:
+                x = self.norm(x)
+            if self.relu:
+                x = F.relu(x)
+            return x
+    </code></pre>
+
+    <h2>Utility Functions</h2>
+    <p>These functions help in the training process from preprocessing the input image to calculating the gram-matrix for loss calculation.</p>
+
+    <pre><code>
+    def gram_matrix(y):
+        """ Returns the gram matrix of y (used to compute style loss) """
+        (b, c, h, w) = y.size()
+        features = y.view(b, c, w * h)
+        features_t = features.transpose(1, 2)
+        gram = features.bmm(features_t) / (c * h * w)
+        return gram
+    </code></pre>
+
+    <pre><code>
+    def train_transform(image_size):
+        """ Transforms for training images """
+        transform = transforms.Compose(
+            [
+                transforms.Resize((int(image_size * 1.15), int(image_size * 1.15))),
+                transforms.RandomCrop(image_size),
+                transforms.ToTensor(),
+                transforms.Normalize(mean, std),
+            ]
+        )
+        return transform
+    </code></pre>
+
+    <pre><code>
+    def style_transform(image_size=None):
+        """ Transforms for style image """
+        resize = [transforms.Resize((image_size, image_size))] if image_size else []
+        transform = transforms.Compose(resize + [transforms.ToTensor(), transforms.Normalize(mean, std)])
+        return transform
+    </code></pre>
+
+    <pre><code>
+    def test_transform(image_size=None):
+        """ Transforms for test image """
+        resize = [transforms.Resize(image_size)] if image_size else []
+        transform = transforms.Compose(resize + [transforms.ToTensor(), transforms.Normalize(mean, std)])
+        return transform
+    </code></pre>
+
+    <pre><code>
+    def denormalize(tensors):
+        """ Denormalizes image tensors using mean and std """
+        for c in range(3):
+            tensors[:, c].mul_(std[c]).add_(mean[c])
+        return tensors
+    </code></pre>
+
+    <pre><code>
+    def deprocess(image_tensor):
+        """ Denormalizes and rescales image tensor """
+        image_tensor = denormalize(image_tensor)[0]
+        image_tensor *= 255
+        image_np = torch.clamp(image_tensor, 0, 255).cpu().numpy().astype(np.uint8)
+        image_np = image_np.transpose(1, 2, 0)
+        return image_np
+    </code></pre>
+
+    <h2>Training Loop</h2>
+<p>This is our main training loop. Here we follow a specific order of steps to train our neural net. The steps are as follows:</p>
+<ul>
+    <li>First, the train dataloaders are initialized to provide us with the batches of data that the model will use to train on.</li>
+    <li>Then the neural nets are initialized for usage.</li>
+    <li>After that we initialize the optimizer which updates the weights of the model and helps in training. The optimizer takes a very important hyperparameter called learning rate which defines how intensely model weights are updated. A good learning rate marks the balance between slow training and overshooting.</li>
+    <li>Next, we transform our input images to the desired shape and keep a small set of 8 images aside for validation purposes. These 8 images are used to understand how the model training progresses.</li>
+    <li>After this, the main process starts. The outer loop runs "epochs" number of times. The inner loop iterates over the batches provided by the dataloader. Model output is generated for the input image, loss is calculated for the whole batch and model weights are updated using backpropagation. All this runs multiple times in each epoch.</li>
+    <li>During the training, we keep saving the model weights and the output of the model on the validation set we kept aside earlier.</li>
+</ul>
+
+<pre><code>
+def fast_trainer(style_image,    
+                 style_name,     
+                 dataset_path,   
+                 image_size=256,
+                 style_size=448,
+                 batch_size = 8,
+                 lr = 1e-5,
+                 epochs = 1,
+                 checkpoint_model = None,
+                 checkpoint_interval=200,
+                 sample_interval=200,
+                 lambda_style=10e10,
+                 lambda_content=10e5,):
+    
+    os.makedirs(f"./images/outputs/{style_name}-training", exist_ok=True)
+    os.makedirs(f"./checkpoints", exist_ok=True)
+
+    """ Create dataloader for the training data """
+    train_dataset = datasets.ImageFolder(dataset_path, train_transform(image_size))
+    dataloader = DataLoader(train_dataset, batch_size=batch_size)
+
+    """ Define networks """
+    transformer = TransformerNet().to(device)
+    vgg = VGG16(requires_grad=False).to(device)
+
+    """ Load checkpoint model if specified """
+    if checkpoint_model:
+        transformer.load_state_dict(torch.load(checkpoint_model))
+
+    """ Define optimizer and loss """
+    optimizer = Adam(transformer.parameters(), lr)
+    l2_loss = torch.nn.MSELoss().to(device)
+
+    """ Load style image """
+    style = style_transform(style_size)(Image.open(style_image))
+    style = style.repeat(batch_size, 1, 1, 1).to(device)
+
+    """ Extract style features """
+    features_style = vgg(style)
+    gram_style = [gram_matrix(y) for y in features_style]
+
+    """ Sample 8 images for visual evaluation of the model """
+    image_samples = []
+    for path in random.sample(glob.glob(f"{dataset_path}/*/*.jpg"), 8):
+        image_samples += [style_transform(image_size)(Image.open(path))]
+    image_samples = torch.stack(image_samples)
+
+    def save_sample(batches_done):
+        """ Evaluates the model and saves image samples """
+        transformer.eval()
+        with torch.no_grad():
+            output = transformer(image_samples.to(device))
+        image_grid = denormalize(torch.cat((image_samples.cpu(), output.cpu()), 2))
+        save_image(image_grid, f"./images/outputs/{style_name}-training/{batches_done}.jpg", nrow=4)
+        transformer.train()
+
+    train_metrics = {"content": [], "style": [], "total": []}
+    for epoch in range(epochs):
+        epoch_metrics = {"content": [], "style": [], "total": []}
+        for batch_i, (images, _) in enumerate(dataloader):
+            optimizer.zero_grad()
+
+            images_original = images.to(device)
+            images_transformed = transformer(images_original)
+
+            # Extract features
+            features_original = vgg(images_original)
+            features_transformed = vgg(images_transformed)
+
+            # Compute content loss as MSE between features
+            content_loss = lambda_content * l2_loss(features_transformed.relu2_2, features_original.relu2_2)
+
+            # Compute style loss as MSE between gram matrices
+            style_loss = 0
+            for ft_y, gm_s in zip(features_transformed, gram_style):
+                gm_y = gram_matrix(ft_y)
+                style_loss += l2_loss(gm_y, gm_s[: images.size(0), :, :])
+            style_loss *= lambda_style
+
+            total_loss = content_loss + style_loss
+            total_loss.backward()
+            optimizer.step()
+
+            epoch_metrics["content"] += [content_loss.item()]
+            epoch_metrics["style"] += [style_loss.item()]
+            epoch_metrics["total"] += [total_loss.item()]
+
+            train_metrics["content"] += [content_loss.item()]
+            train_metrics["style"] += [style_loss.item()]
+            train_metrics["total"] += [total_loss.item()]
+
+            batches_done = epoch * len(dataloader) + batch_i + 1
+            if batches_done % sample_interval == 0:
+                save_sample(batches_done)
+
+            if checkpoint_interval > 0 and batches_done % checkpoint_interval == 0:
+                torch.save(transformer.state_dict(), f"./checkpoints/{style_name}_{batches_done}.pth")
+
+            torch.save(transformer.state_dict(), f"./checkpoints/last_checkpoint.pth")
+
+            print("Training Completed!")
+
+            # Plotting the loss curve
+            plt.plot(train_metrics["content"], label="Content Loss")
+            plt.plot(train_metrics["style"], label="Style Loss")
+            plt.plot(train_metrics["total"], label="Total Loss")
+            plt.xlabel('Iteration')
+            plt.ylabel('Loss')
+            plt.title('Training Loss')
+            plt.legend()
+            plt.show()
+        </code></pre>
+
+        <h2>Training Overtime From On A Batch Of 8 Images</h2>
+
+        <p>For each style being trained, The model starts from a noise image and overtime reaches an image with the least style and content loss overtime.</p>
+
+        
+        <img src="static\result\staryNightStyle-training\200.jpg" alt="Best Result 3 [More Weight to Content]" width="600">
+        <h4>Fig. Training Result After 200 Epochs</h4>
+
+        <div style="padding: 15px;"></div>
+        
+        <img src="static\result\staryNightStyle-training\400.jpg" alt="Best Result 3 [More Weight to Content]" width="600">
+        <h4>Fig. Training Result After 400 Epochs</h4>
+
+        <div style="padding: 15px;"></div>
+        
+        <img src="static\result\staryNightStyle-training\600.jpg" alt="Best Result 3 [More Weight to Content]" width="600">
+        <h4>Fig. Training Result After 600 Epochs</h4>
+
+
+        <div style="padding: 15px;"></div>
+        
+        <img src="static\result\staryNightStyle-training\1600.jpg" alt="Best Result 3 [More Weight to Content]" width="600">
+        <h4>Fig. Training Result After 1600 Epochs</h4>
+
+        <div style="padding: 15px;"></div>
+        
+        <img src="static\result\staryNightStyle-training\1800.jpg" alt="Best Result 3 [More Weight to Content]" width="600">
+        <h4>Fig. Training Result After 1800 Epochs</h4>
+
+
+        <div style="padding: 15px;"></div>
+        
+        <img src="static\result\staryNightStyle-training\2400.jpg" alt="Best Result 3 [More Weight to Content]" width="600">
+        <h4>Fig. Training Result After 2400 Epochs</h4>
+
+
+        <h2>Testing and Inference Loop</h2>
+        <p>After the model has been trained, it can be used to generate outputs for desired inputs. Each model is trained on a single style and can produce images with that single style. That means we require multiple models, one model per style, if we want to use this in production.</p>
+
+        <pre><code>
+        def test_image(image_path, checkpoint_model, save_path):
+            os.makedirs(os.path.join(save_path,"results"), exist_ok=True)
+
+            transform = test_transform()
+
+            # Define model and load model checkpoint
+            transformer = TransformerNet().to(device)
+            transformer.load_state_dict(torch.load(checkpoint_model))
+            transformer.eval()
+
+            # Prepare input
+            image_tensor = Variable(transform(Image.open(image_path))).to(device)
+            image_tensor = image_tensor.unsqueeze(0)
+
+            # Stylize image
+            with torch.no_grad():
+                stylized_image = denormalize(transformer(image_tensor)).cpu()
+
+            # Save image
+            fn = checkpoint_model.split('/')[-1].split('.')[0]
+            save_image(stylized_image, os.path.join(save_path,f"results/{fn}-output.jpg"))
+            print("Image Saved!")
+            </code></pre>
+
+            <h2>Training</h2>
+        <p>Run the following command to train the model:</p>
+
+        <pre><code>
+        """ Run this to train the model """
+        #[NOTE]: For representation purposes, I am using a smaller dataset. Please use the dataset given at the start of this notebook 
+        #for better results and change the dataset_path in this function.
+
+        fast_trainer(style_image='./style/picasso_selfportrait.jpg',
+                    style_name='Picasso_Selfportrait',
+                    dataset_path='../input/',
+                    epochs=1)
+        </code></pre>
+
+        <p>During the training process, the VGG16 model weights will be downloaded:</p>
+        <pre><code>
+        Downloading: "https://download.pytorch.org/models/vgg16-397923af.pth" 
+        to /root/.cache/torch/checkpoints/vgg16-397923af.pth
+        [Epoch 1/1] [Batch 624/5000] 
+        [Content: 6732961.50 (7414326.08) 
+        Style: 3569548.25 (10073453.07) 
+        Total: 10302510.00 (17487779.12)]
+        Training Completed!
+        </code></pre>
+
+        <img src="static/explanation/trainingLossFunction.png" alt="training loss function" width="600">
+
+        <img src="static\explanation\animate.gif" alt="Animated" width="600">
+        <h4>Fig. Image Generation Timelapse</h4>
+       
+        <h2>Testing and Inference</h2>
+        <p>To test on your own image, run the following:</p>
+
+        <pre><code>
+        test_image(image_path='./content/japanese_garden.jpg',
+                  checkpoint_model='./checkpoints/best_model.pth',
+                  save_path='./')
+        </code></pre>
+
+
+        <h2>Experiments</h2>
+        
+        <p>I experimented with different layer formats and style and content weights. Below are the results of each experiment:</p>
+
+        <img src="static\explanation\ExperimentsTable1.png" alt="Table 1. Experiments" width="600">
+
+
+        <p>Now, let's look at the results of each experiment at different instances.</p>
+
+        <h4>Fig 7. Experiment 1 Result [More Weight to Style]</h4>
+        <img src="static\explanation\8.jpg" alt="Best Result 1 [More Weight to Style]" width="600">
+
+        <h4>Fig 8. Experiment 2 Result [Balanced Style and Content]</h4>
+        <img src="static\explanation\12.jpg" alt="Best Result 2 [Balanced Style and Content]" width="600">
+
+        <h4>Fig 9. Experiment 3 Result [More Weight to Content]</h4>
+        <img src="static\explanation\14.jpg" alt="Best Result 3 [More Weight to Content]" width="600">
+
+        <h4>Fig 9. Experiment 4 Result [More Weight to Style, AvgPool]</h4>
+        <img src="static\explanation\best_result3.jpg" alt="Best Result 3 [More Weight to Content]" width="600">
+
+        <h4>Fig 9. Expreiment 5 Result [More Weight to Content, Maxpool]</h4>
+        <img src="static\explanation\16.jpg" alt="Best Result 3 [More Weight to Content]" width="600">
+
+
+        
+
+
+        <h2>Important Links</h2>
+        <ul>
+            <li><a href="http://images.cocodataset.org/zips/test2017.zip" target="_blank">Train Dataset Link</a></li>
+            <li><a href="https://github.com/myelinfoundry-2019/challenge/raw/master/picasso_selfportrait.jpg" target="_blank">Style Image</a></li>
+            <li><a href="https://github.com/myelinfoundry-2019/challenge/raw/master/japanese_garden.jpg" target="_blank">Content Image</a></li>
+            <li><a href="https://www.dropbox.com/s/7xvmmbn1bx94exz/best_model.pth?dl=1" target="_blank">Best Model</a></li>
+        </ul>
+
+        <h2>References</h2>
+        <ul>
+            <li>Style Transfer Guide</li>
+            <li>Breaking Down Leon Gatys’ Neural Style Transfer in PyTorch</li>
+            <li>Intuitive Guide to Neural Style Transfer</li>
+            <li>A Neural Algorithm of Artistic Style By Leon A. Gatys, Alexander S. Ecker, Matthias Bethge</li>
+            <li>Perceptual Losses for Real-Time Style Transfer and Super-Resolution by Justin Johnson, Alexandre Alahi, Li Fei-Fei</li>
+            <li>Neural Style Transfer on Real-Time Video (With Full Implementable Code)</li>
+            <li>Classic Neural Style Transfer</li>
+            <li>Fast Neural Style Transfer using Lua</li>
+            <li>Fast Neural Style Transfer using Python</li>
+        </ul>
+
+
+
+            
+      <button onclick="window.location.href='/'">Back to Home</button>
+    </div>
+  </body>
+</html>
