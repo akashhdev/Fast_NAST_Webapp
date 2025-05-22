@@ -3,7 +3,7 @@
 ## Overview
 This project is a simple web application built with Flask that allows users to upload any images of their choosing and transfer a choose art style to them using a trained machine learning model. The application features a minimalist UI, allowing users to upload images, view colorized results, and clear uploaded files.
 
-https://youtu.be/R_dPeist9VI
+[![Watch the video](https://img.youtube.com/vi/R_dPeist9VI/hqdefault.jpg)](https://youtu.be/R_dPeist9VI)
 
 <!-- Demo Screenshot 1 -->
 <img src="https://github.com/user-attachments/assets/2c1b5096-7017-4633-9c57-b147ea92e07f" alt="Example Image" width="400" height="300"/>
